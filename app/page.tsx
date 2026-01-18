@@ -93,7 +93,8 @@ export default function HabitTracker() {
 
   // Helpers
   const formatDate = (date: Date) => date.toISOString().split('T')[0];
-  const today = formatDate(new Date());
+  const todayDate = new Date();
+  const todayStr = formatDate(todayDate);
 
   const addHabit = () => {
     if (!newHabitName.trim()) return;
@@ -152,6 +153,21 @@ export default function HabitTracker() {
 
   const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
   const monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+  // Helper to get day name
+  const getDayName = (day: number) => {
+    const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+    return date.toLocaleDateString('en-US', { weekday: 'short' });
+  };
+
+  // Helper to check if a date is in the past (before today)
+  const isPastDate = (day: number) => {
+    const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+    date.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
 
   return (
     <div className="min-h-screen bg-[#F1F5F9] text-slate-900 p-4 md:p-8">
@@ -312,7 +328,12 @@ export default function HabitTracker() {
                       <tr className="border-b border-slate-200/60">
                         <th className="p-6 font-bold text-xs text-slate-400 uppercase tracking-widest sticky left-0 bg-slate-50 z-10 min-w-[160px]">Habit</th>
                         {Array.from({ length: daysInMonth }, (_, i) => (
-                          <th key={i} className="p-2 text-center text-[10px] font-black text-slate-400 min-w-[36px]">{i + 1}</th>
+                          <th key={i} className="p-2 text-center min-w-[48px]">
+                            <div className="flex flex-col items-center">
+                              <span className="text-[10px] font-black text-slate-400 uppercase">{getDayName(i + 1)}</span>
+                              <span className="text-xs font-black text-slate-600">{i + 1}</span>
+                            </div>
+                          </th>
                         ))}
                       </tr>
                     </thead>
@@ -328,18 +349,29 @@ export default function HabitTracker() {
                           {Array.from({ length: daysInMonth }, (_, i) => {
                             const date = formatDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i + 1));
                             const isCompleted = completions[date]?.[habit.id];
+                            const isPast = isPastDate(i + 1);
+                            
                             return (
                               <td key={i} className="p-1.5 text-center">
                                 <button 
                                   onClick={() => toggleCompletion(habit.id, date)}
                                   className={cn(
-                                    "w-7 h-7 rounded-lg transition-all flex items-center justify-center border-2",
+                                    "w-8 h-8 rounded-lg transition-all flex items-center justify-center border-2 relative",
                                     isCompleted 
                                       ? "bg-green-500 border-green-500 text-white shadow-sm shadow-green-200" 
-                                      : "bg-white border-slate-200 hover:border-blue-300"
+                                      : isPast 
+                                        ? "bg-slate-100 border-slate-200 text-slate-300" 
+                                        : "bg-white border-slate-200 hover:border-blue-300"
                                   )}
                                 >
-                                  {isCompleted && <CheckCircle2 className="w-4 h-4" />}
+                                  {isCompleted ? (
+                                    <CheckCircle2 className="w-4 h-4" />
+                                  ) : isPast ? (
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <div className="w-4 h-[2px] bg-slate-300 rotate-45 absolute" />
+                                      <div className="w-4 h-[2px] bg-slate-300 -rotate-45 absolute" />
+                                    </div>
+                                  ) : null}
                                 </button>
                               </td>
                             );
@@ -402,10 +434,10 @@ export default function HabitTracker() {
                         <Trash2 className="w-5 h-5" />
                       </button>
                       <button 
-                        onClick={() => toggleCompletion(habit.id, today)}
+                        onClick={() => toggleCompletion(habit.id, todayStr)}
                         className={cn(
                           "w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 border-4",
-                          completions[today]?.[habit.id] 
+                          completions[todayStr]?.[habit.id] 
                             ? "bg-green-500 border-green-100 text-white scale-110 shadow-lg shadow-green-200" 
                             : "bg-white border-slate-100 text-slate-200 hover:border-blue-100 hover:text-blue-200"
                         )}
