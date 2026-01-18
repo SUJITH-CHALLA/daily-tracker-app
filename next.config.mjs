@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-	turbopack: {},
+	output: 'export',
+	basePath: '/daily-tracker-app',
 	images: {
+		unoptimized: true,
 		remotePatterns: [
 			{
 				protocol: "https",
@@ -16,7 +18,6 @@ const nextConfig = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
-	allowedDevOrigins: ["*.theopenbuilder.com"],
 };
 
 export default nextConfig;
