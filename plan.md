@@ -1,0 +1,5 @@
+- **Habit Creation and Management**: Users can define, edit, and delete personal habits they wish to track, including setting specific goals or frequencies.
+- **Daily Progress Logging**: A simple interface for users to mark habits as completed each day, providing immediate visual feedback on their daily goals.
+- **Streak Tracking and Visualization**: Automatic calculation and display of "streaks" (consecutive days of completion) for each habit to motivate consistent behavior.
+- **Gentle Reminder System**: Configurable notifications that prompt users to log their habits at specific times of the day to ensure they stay on track.
+- **Historical Performance Dashboard**: A centralized view where users can review their habit history, success rates, and personal best streaks over time.
