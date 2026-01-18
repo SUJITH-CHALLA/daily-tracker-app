@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-	output: 'export',
-	basePath: '/daily-tracker-app',
 	images: {
-		unoptimized: true,
 		remotePatterns: [
 			{
 				protocol: "https",
