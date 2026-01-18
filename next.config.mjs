@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+	// Removed basePath so the URL is clean
 	images: {
 		remotePatterns: [
 			{
